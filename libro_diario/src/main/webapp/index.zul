@@ -1,0 +1,144 @@
+<?page title="CRUD" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<style src="/widgets/grid/inline_row_editing/style.css" />
+	<window title="Usuarios" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vmUsuario') @init('mx.com.felicia.libro_diario.controllers.UsuarioVM')">
+		<vbox spacing="15px">
+			<button
+				onClick="@command('showOrHiddeAddUser', selection = 1)"
+				disabled="@load((vmUsuario.addUsuario or vmUsuario.toUpdate))">
+				New User
+			</button>
+			<hbox id="controlForm"
+				visible="@load(vmUsuario.addUsuario)">
+				<textbox placeholder="Nombre Completo"
+					value="@bind(vmUsuario.currentUsuarios.nombreCompleto)">
+				</textbox>
+				<textbox placeholder="Usuario"
+					value="@bind(vmUsuario.currentUsuarios.usuario)">
+				</textbox>
+				<textbox placeholder="Contraseña"
+					value="@bind(vmUsuario.currentUsuarios.contrasena)">
+				</textbox>
+
+				<button onClick="@command('insertAndSave')">
+					Save
+				</button>
+				<button
+					onClick="@command('showOrHiddeAddUser', selection = 2)">
+					Cancel
+				</button>
+			</hbox>
+			<!-- 			<grid -->
+			<!-- 				model="@load(vmUsuario.listUsuario) @template((vmUsuario.toUpdate) ? 'editable' : 'lectura')"> -->
+			<!-- 				<auxhead> -->
+			<!-- 					<auxheader colspan="4" align="right"> -->
+			<!-- 						<checkbox checked="@bind(vmUsuario.toUpdate)" -->
+			<!-- 							label="Editar Campos"> -->
+			<!-- 						</checkbox> -->
+			<!-- 					</auxheader> -->
+			<!-- 				</auxhead> -->
+			<!-- 				<columns> -->
+			<!-- 					<column width="">Nombre Completo</column> -->
+			<!-- 					<column width="">Usuario</column> -->
+			<!-- 					<column width="">Contrasena</column> -->
+			<!-- 					<column width="">Accion</column> -->
+			<!-- 				</columns> -->
+			<!-- 				<template name="editable"> -->
+			<!-- 					<row> -->
+			<!-- 						<textbox instant="true" -->
+			<!-- 							value="@load(each.nombreCompleto) @save(each.nombreCompleto, before='confirm')" /> -->
+			<!-- 						<textbox instant="true" -->
+			<!-- 							value="@load(each.usuario) @save(each.usuario, before='confirm')" /> -->
+			<!-- 						<textbox instant="true" -->
+			<!-- 							value="@load(each.contrasena) @save(each.contrasena, before='confirm')" /> -->
+			<!-- 						<div align="center"> -->
+			<!-- 							<button iconSclass="z-icon-pencil" -->
+			<!-- 								onClick="@command('showEditable')" -->
+			<!-- 								disabled="@load(vmUsuario.rowUpdate)" /> -->
+			<!-- 							<button iconSclass="z-icon-save" -->
+			<!-- 								onClick="@command('confirm', currentUsuarios=each)" -->
+			<!-- 								visible="@load(vmUsuario.rowUpdate)" /> -->
+			<!-- 							<button iconSclass="z-icon-times" -->
+			<!-- 								onClick="@command('changeToUpdate', currentUsuarios=each)" -->
+			<!-- 								visible="@load(vmUsuario.rowUpdate)" /> -->
+			<!-- 						</div> -->
+			<!-- 					</row> -->
+			<!-- 				</template> -->
+			<!-- 				<template name="lectura"> -->
+			<!-- 					<row> -->
+			<!-- 						<label value="@load(each.nombreCompleto)"></label> -->
+			<!-- 						<label value="@load(each.usuario)"></label> -->
+			<!-- 						<label value="@load(each.contrasena)"></label> -->
+			<!-- 						<div> -->
+			<!-- 							<button -->
+			<!-- 								onClick="@command('delete', idToDelete = each.idUsuario, nombreCompleto = each.nombreCompleto)" -->
+			<!-- 								iconSclass="z-icon-eraser" -->
+			<!-- 								disabled="@load(vmUsuario.addUsuario)"> -->
+			<!-- 							</button> -->
+			<!-- 						</div> -->
+			<!-- 					</row> -->
+			<!-- 				</template> -->
+			<!-- 			</grid> -->
+
+			<listbox
+				model="@bind(vmUsuario.listUsuario) @template((vmUsuario.toUpdate) ? 'edit' : 'read')"
+				selectedItem="@bind(vmUsuario.currentUsuarios)" rows="10">
+				<listhead>
+					<listheader label="NOMBRE" />
+					<listheader label="USUARIO" />
+					<listheader label="CONTRA" />
+					<listheader label="ACCION">
+						
+					</listheader>
+				</listhead>
+				<template name="edit">
+					<listitem>
+						<listcell>
+							<textbox
+								value="@load(each.nombreCompleto) @save(each.nombreCompleto, before='confirm')">
+							</textbox>
+						</listcell>
+						<listcell>
+							<textbox
+								value="@load(each.usuario) @save(each.usuario, before='confirm')">
+							</textbox>
+						</listcell>
+						<listcell>
+							<textbox
+								value="@load(each.contrasena) @save(each.contrasena, before='confirm')">
+							</textbox>
+						</listcell>
+						<listcell>
+							<div align="center">
+								<button iconSclass="z-icon-save"
+									onClick="@command('confirm', currentUsuarios=each)"
+									visible="@load(vmUsuario.rowUpdate)" />
+								<button iconSclass="z-icon-times"
+									onClick="@command('changeToUpdate', currentUsuarios=each)"
+									visible="@load(vmUsuario.rowUpdate)" />
+							</div>
+						</listcell>
+					</listitem>
+				</template>
+				<template name="read">
+					<listitem>
+						<listcell label="@load(each.nombreCompleto)" />
+						<listcell label="@load(each.usuario)" />
+						<listcell label="@load(each.contrasena)" />
+						<listcell>
+							<button iconSclass="z-icon-pencil"
+								onClick="@command('showEditable')"
+								disabled="@load(vmUsuario.addUsuario)" />
+							<button
+								onClick="@command('delete', idToDelete = each.idUsuario, nombreCompleto = each.nombreCompleto)"
+								iconSclass="z-icon-eraser"
+								disabled="@load(vmUsuario.addUsuario)" />
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+		</vbox>
+	</window>
+</zk>

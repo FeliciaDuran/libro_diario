@@ -1,0 +1,73 @@
+<?page title="Usuarios" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window title="Usuarios" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('mx.com.felicia.libro_diario.controllers.UsuarioVM')">
+		<button onClick="@command('showOrHiddeAddUser', selection = 1)"
+			disabled="@load((vm.addUsuario or vm.toUpdate))">
+			New User
+		</button>
+		<hbox id="controlForm" visible="@load(vm.addUsuario)">
+			<textbox placeholder="Nombre Completo"
+				value="@bind(vm.currentUsuarios.nombreCompleto)">
+			</textbox>
+			<textbox placeholder="Usuario"
+				value="@bind(vm.currentUsuarios.usuario)">
+			</textbox>
+			<textbox placeholder="Contraseña"
+				value="@bind(vm.currentUsuarios.contrasena)">
+			</textbox>
+
+			<button onClick="@command('insertAndSave')">Save</button>
+			<button
+				onClick="@command('showOrHiddeAddUser', selection = 2)">
+				Cancel
+			</button>
+		</hbox>
+
+		<listbox model="@load(vm.listUsuario)"
+			selectedItem="@bind(vm.currentUsuarios)">
+			<auxhead>
+				<auxheader colspan="3" class="topic">
+					Usuarios
+				</auxheader>
+			</auxhead>
+			<listhead>
+				<listheader label="Nombre" align="center" />
+				<listheader label="Usuario" align="center" />
+				<listheader label="Contraseña" width="200px"
+					align="center" />
+			</listhead>
+			<template name="model" var="usuario">
+				<listitem>
+					<listcell label="@load(usuario.nombreCompleto)" />
+					<listcell label="@load(usuario.usuario)" />
+					<listcell label="@load(usuario.contrasena)" />
+				</listitem>
+			</template>
+		</listbox>
+		<grid>
+			<auxhead>
+				<auxheader colspan="3" class="topic">
+					Editar Usuario
+				</auxheader>
+			</auxhead>
+			<columns>
+				<column label="Nombre" align="center" />
+				<column label="Usuario" align="center" />
+				<column label="Contraseña" align="center" />
+			</columns>
+			<rows>
+				<row>
+					<textbox
+						value="@bind(vm.currentUsuarios.nombreCompleto)" width="95%" />
+					<textbox value="@bind(vm.currentUsuarios.usuario)"
+						width="95%" />
+					<label value="@load(vm.currentUsuarios.contrasena)"
+						width="95px" />
+					
+				</row>
+			</rows>
+		</grid>
+	</window>
+</zk>
